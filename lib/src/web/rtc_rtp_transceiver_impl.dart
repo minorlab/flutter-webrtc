@@ -78,7 +78,7 @@ class RTCRtpTransceiverWeb extends RTCRtpTransceiver {
           jsutil.getProperty(_jsTransceiver, 'direction')];
 
   @override
-  String get mid => jsutil.getProperty(_jsTransceiver, 'mid');
+  String? get mid => jsutil.getProperty(_jsTransceiver, 'mid');
 
   @override
   RTCRtpSender get sender => RTCRtpSenderWeb.fromJsSender(
@@ -92,7 +92,7 @@ class RTCRtpTransceiverWeb extends RTCRtpTransceiver {
   bool get stoped => jsutil.getProperty(_jsTransceiver, 'stopped');
 
   @override
-  String get transceiverId => mid;
+  String? get transceiverId => mid;
 
   @override
   Future<void> setDirection(TransceiverDirection direction) async {
