@@ -18,8 +18,12 @@ List<RTCRtpEncoding> listToRtpEncodings(List<Map<String, dynamic>> list) {
 }
 
 class RTCRtpTransceiverInitWeb extends RTCRtpTransceiverInit {
-  RTCRtpTransceiverInitWeb(TransceiverDirection direction, List<MediaStream> streams, List<RTCRtpEncoding> sendEncodings)
-      : super(direction: direction, streams: streams, sendEncodings: sendEncodings);
+  RTCRtpTransceiverInitWeb(TransceiverDirection direction,
+      List<MediaStream> streams, List<RTCRtpEncoding> sendEncodings)
+      : super(
+            direction: direction,
+            streams: streams,
+            sendEncodings: sendEncodings);
 
   factory RTCRtpTransceiverInitWeb.fromMap(Map<dynamic, dynamic> map) {
     if (map['direction'] == null) {
@@ -29,7 +33,9 @@ class RTCRtpTransceiverInitWeb extends RTCRtpTransceiverInit {
       throw Exception('You must provide the streams');
     }
 
-    return RTCRtpTransceiverInitWeb(typeStringToRtpTransceiverDirection[map['direction']]!, (map['streams'] as List<MediaStream>).map((e) => e).toList(),
+    return RTCRtpTransceiverInitWeb(
+        typeStringToRtpTransceiverDirection[map['direction']]!,
+        (map['streams'] as List<MediaStream>).map((e) => e).toList(),
         listToRtpEncodings(map['sendEncodings']));
   }
 
@@ -37,15 +43,20 @@ class RTCRtpTransceiverInitWeb extends RTCRtpTransceiverInit {
     return {
       'direction': typeRtpTransceiverDirectionToString[direction],
       if (streams != null) 'streamIds': streams!.map((e) => e.id).toList(),
-      if (sendEncodings != null) 'sendEncodings': sendEncodings!.map((e) => e.toMap()).toList(),
+      if (sendEncodings != null)
+        'sendEncodings': sendEncodings!.map((e) => e.toMap()).toList(),
     };
   }
 
   static Map<String, dynamic> initToMap(RTCRtpTransceiverInit init) {
     return {
       'direction': typeRtpTransceiverDirectionToString[init.direction],
-      'streams': init.streams != null ? init.streams!.map((e) => (e as MediaStreamWeb).jsStream).toList() : [],
-      'sendEncodings': init.sendEncodings != null ? init.sendEncodings!.map((e) => e.toMap()).toList() : [],
+      'streams': init.streams != null
+          ? init.streams!.map((e) => (e as MediaStreamWeb).jsStream).toList()
+          : [],
+      'sendEncodings': init.sendEncodings != null
+          ? init.sendEncodings!.map((e) => e.toMap()).toList()
+          : [],
     };
   }
 }
@@ -53,7 +64,8 @@ class RTCRtpTransceiverInitWeb extends RTCRtpTransceiverInit {
 class RTCRtpTransceiverWeb extends RTCRtpTransceiver {
   RTCRtpTransceiverWeb(this._jsTransceiver, _peerConnectionId);
 
-  factory RTCRtpTransceiverWeb.fromJsObject(Object jsTransceiver, {String? peerConnectionId}) {
+  factory RTCRtpTransceiverWeb.fromJsObject(Object jsTransceiver,
+      {String? peerConnectionId}) {
     var transceiver = RTCRtpTransceiverWeb(jsTransceiver, peerConnectionId);
     return transceiver;
   }
@@ -61,27 +73,32 @@ class RTCRtpTransceiverWeb extends RTCRtpTransceiver {
   Object _jsTransceiver;
 
   @override
-  TransceiverDirection? get currentDirection => typeStringToRtpTransceiverDirection[jsutil.getProperty(_jsTransceiver, 'direction')];
+  TransceiverDirection? get currentDirection =>
+      typeStringToRtpTransceiverDirection[
+          jsutil.getProperty(_jsTransceiver, 'direction')];
 
   @override
-  String? get mid => jsutil.getProperty(_jsTransceiver, 'mid');
+  String get mid => jsutil.getProperty(_jsTransceiver, 'mid');
 
   @override
-  RTCRtpSender get sender => RTCRtpSenderWeb.fromJsSender(jsutil.getProperty(_jsTransceiver, 'sender'));
+  RTCRtpSender get sender => RTCRtpSenderWeb.fromJsSender(
+      jsutil.getProperty(_jsTransceiver, 'sender'));
 
   @override
-  RTCRtpReceiver get receiver => RTCRtpReceiverWeb(jsutil.getProperty(_jsTransceiver, 'receiver'));
+  RTCRtpReceiver get receiver =>
+      RTCRtpReceiverWeb(jsutil.getProperty(_jsTransceiver, 'receiver'));
 
   @override
   bool get stoped => jsutil.getProperty(_jsTransceiver, 'stopped');
 
   @override
-  String? get transceiverId => mid;
+  String get transceiverId => mid;
 
   @override
   Future<void> setDirection(TransceiverDirection direction) async {
     try {
-      jsutil.setProperty(_jsTransceiver, 'direction', typeRtpTransceiverDirectionToString[direction]);
+      jsutil.setProperty(_jsTransceiver, 'direction',
+          typeRtpTransceiverDirectionToString[direction]);
     } on PlatformException catch (e) {
       throw 'Unable to RTCRtpTransceiver::setDirection: ${e.message}';
     }
